@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гарнитура - Магазин электроники</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        /* Основная часть сайта */
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Стили бокового меню */
+        .sidebar {
+            height: 100%;
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #4d0287;
+            padding-top: 20px;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+            transition: width 0.3s ease;
+            overflow: hidden;
+        }
+
+        /* Название магазина в боковом меню */
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        .store-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 1.2px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Кнопка сворачивания меню в заголовке */
+        .toggle-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            color: #d7b3e0;
+        }
+
+        .sidebar-collapsed .toggle-btn {
+            transform: rotate(180deg);
+        }
+
+        /* Ссылки в боковом меню */
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #e7e7e7;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar i {
+            margin-right: 15px;
+        }
+
+        /* Текст ссылок скрывается при сворачивании */
+        .sidebar-collapsed .store-name, 
+        .sidebar-collapsed .sidebar a span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Наведение на ссылки */
+        .sidebar a:hover {
+            background-color: #471f51a5;
+            color: #fff;
+        }
+
+        /* Заголовок на странице */
+        h1 {
+            color: #0c0c0c;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        /* Стили для основного содержимого */
+        p {
+            line-height: 1.8;
+            color: #070707;
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* Стили для контейнера текста и изображения */
+        .content {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        /* Стили для текстового контейнера */
+        .text-container {
+            max-width: 70%;
+            margin-left: 20px;
+        }
+
+        /* Стили для изображения */
+        .image-container {
+            max-width: 25%;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Кнопка "Купить" */
+        .buy-button {
+            background-color: #4d0287;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-button:hover {
+            background-color: #d7b3e0;
+        }
+
+        
+
+        /* Контейнер для модального окна */
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto; /* Центрирование */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 350px; /* Ширина модального окна */
+            border-radius: 8px; /* Скругленные углы */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Тень для модального окна */
+            text-align: center; /* Центрирование текста */
+        }
+
+        /* Кнопка закрытия */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+
+            .main-content {
+                margin-left: 60px;
+                padding: 20px;
+            }
+
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .text-container, .image-container {
+                max-width: 100%;
+                margin-left: 0;
+            }
+        }
+
+        /* Убедитесь, что кнопка всегда на виду */
+        .sidebar-header {
+            position: relative;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Стили для иконок соцсетей */
+        .social-icons {
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            margin-right: 20px;
+            font-size: 36px; /* Увеличенный размер иконок */
+            color: #4d0287;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #d7b3e0;
+            transform: scale(1.1); /* Увеличение при наведении */
+        }
+        /* Эффект снега */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 1.5rem;
+            pointer-events: none;
+            user-select: none;
+            animation: fall 10s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
+            100% {
+                transform: translateX(100vw) translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Эффект снега -->
+    <div class="snowflakes">
+        <span class="snowflake" style="left: 10%; animation-duration: 12s;">❄️</span>
+        <span class="snowflake" style="left: 25%; animation-duration: 8s;">❄️</span>
+        <span class="snowflake" style="left: 50%; animation-duration: 10s;">❄️</span>
+        <span class="snowflake" style="left: 75%; animation-duration: 9s;">❄️</span>
+        <span class="snowflake" style="left: 90%; animation-duration: 11s;">❄️</span>
+    </div>
+
+    <!-- Боковое меню -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="store-name">MilTechShop</div>
+            <button class="toggle-btn" onclick="toggleMenu()">&#x25C0;</button>
+        </div>
+        <a href="index.html"><i class="fas fa-info-circle"></i><span>О нас</span></a>
+        <a href="ноутбуки.html"><i class="fas fa-laptop"></i><span>Ноутбуки</span></a>
+        <a href="мониторы.html"><i class="fas fa-desktop"></i><span>Мониторы</span></a>
+        <a href="гарнитура.html"><i class="fas fa-headphones"></i><span>Гарнитура</span></a>
+        <a href="контакты.html"><i class="fas fa-envelope"></i><span>Контакты</span></a>
+    </div>
+
+    <!-- Основное содержимое -->
+    <div class="main-content" id="main-content">
+        <h1>Контакты</h1>
+
+        <!-- Иконки соцсетей -->
+<div class="social-icons">
+  <a href="https://www.instagram.com/iammilana__?igsh=MW83djgybTZpbWk3eQ==" target="_blank">
+      <i class="fab fa-instagram"></i>
+  </a>
+  <a href="https://wa.me/+996707893630" target="_blank">
+      <i class="fab fa-whatsapp"></i>
+  </a>
+  <a href="https://t.me/iammilannna" target="_blank">
+    <i class="fab fa-telegram"></i>
+  </a>
+</div>
+<h2>Адрес</h2>
+<p>г.Бишкек,ул.Абдумамунова 138</p>
+
+        <script>
+            function toggleMenu() {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('main-content');
+
+                if (sidebar.classList.contains('sidebar-collapsed')) {
+                    sidebar.style.width = '260px';
+                    mainContent.style.marginLeft = '260px';
+                    sidebar.classList.remove('sidebar-collapsed');
+                } else {
+                    sidebar.style.width = '60px';
+                    mainContent.style.marginLeft = '60px';
+                    sidebar.classList.add('sidebar-collapsed');
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

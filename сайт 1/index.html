@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин электроники</title>
+    <!-- Подключение Font Awesome для современных иконок -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff; /* Светлый фон страницы */
+            color: #333;
+        }
+
+        /* Основная часть сайта */
+        .main-content {
+            margin-left: 260px; /* Ширина бокового меню */
+            padding: 40px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Стили бокового меню */
+        .sidebar {
+            height: 100%;
+            width: 260px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #4d0287; /* Темно-фиолетовый цвет фона меню */
+            padding-top: 20px;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1); /* Легкая тень для бокового меню */
+            transition: width 0.3s ease;
+            overflow: hidden;
+        }
+
+        /* Название магазина в боковом меню */
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        .store-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 1.2px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Кнопка сворачивания меню в заголовке */
+        .toggle-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            color: #d7b3e0; /* Светло-фиолетовый цвет при наведении */
+        }
+
+        .sidebar-collapsed .toggle-btn {
+            transform: rotate(180deg); /* Поворачивает кнопку на 180 градусов, если меню свернуто */
+        }
+
+        /* Ссылки в боковом меню */
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #e7e7e7; /* Светло-серый цвет ссылок */
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar i {
+            margin-right: 15px;
+        }
+
+        /* Текст ссылок скрывается при сворачивании */
+        .sidebar-collapsed .store-name, 
+        .sidebar-collapsed .sidebar a span {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Наведение на ссылки */
+        .sidebar a:hover {
+            background-color: #471f51a5; /* Темно-фиолетовый при наведении */
+            color: #fff;
+        }
+
+        /* Заголовок на странице */
+        h1 {
+            color: #0c0c0c; /* Темно-фиолетовый цвет заголовков */
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        /* Стили для основного содержимого */
+        p {
+            line-height: 1.8;
+            color: #070707;
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: justify; /* Выравнивание текста по ширине */
+        }
+
+        /* Стили для контейнера текста и изображения */
+        .content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Выравнивание по верхнему краю */
+            margin-bottom: 15px;
+        }
+
+        /* Стили для текстового контейнера */
+        .text-container {
+            max-width: 60%; /* Ограничение ширины текстового контейнера */
+            margin-right: 20px; /* Отступ справа, чтобы текст не пересекался с изображением */
+        }
+
+        /* Стили для изображения */
+        .image-container {
+            max-width: 35%; /* Ограничение ширины контейнера изображения */
+        }
+
+        .image-container img {
+            max-width: 100%; /* Максимальная ширина изображения 100% */
+            height: auto; /* Высота изображения автоматически */
+            border-radius: 8px; /* Скругленные углы для изображения */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для изображения */
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 60px; /* Меню сужается на мобильных устройствах */
+            }
+
+            .main-content {
+                margin-left: 60px;
+                padding: 20px;
+            }
+
+            .content {
+                flex-direction: column; /* Вертикальное расположение на мобильных */
+                align-items: center; /* Центрирование содержимого */
+            }
+
+            .text-container, .image-container {
+                max-width: 100%;
+                margin-right: 0;
+            }
+        }
+
+        /* Добавление стилей, чтобы кнопка всегда была видна */
+        .sidebar-header {
+            position: relative;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        /* Эффект снега */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #fff;
+            font-size: 1.5rem;
+            pointer-events: none;
+            user-select: none;
+            animation: fall 10s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
+            100% {
+                transform: translateX(100vw) translateY(100vh);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- снег -->
+    <div class="snowflakes">
+        <span class="snowflake" style="left: 10%; animation-duration: 12s;">❄️</span>
+        <span class="snowflake" style="left: 25%; animation-duration: 8s;">❄️</span>
+        <span class="snowflake" style="left: 50%; animation-duration: 10s;">❄️</span>
+        <span class="snowflake" style="left: 75%; animation-duration: 9s;">❄️</span>
+        <span class="snowflake" style="left: 90%; animation-duration: 11s;">❄️</span>
+    </div>
+
+    <!-- Боковое меню -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="store-name">MilTechShop</div>
+            <button class="toggle-btn" onclick="toggleMenu()">&#x25C0;</button>
+        </div>
+        <a href="index.html"><i class="fas fa-info-circle"></i><span>О нас</span></a>
+        <a href="ноутбуки.html"><i class="fas fa-laptop"></i><span>Ноутбуки</span></a>
+        <a href="мониторы.html"><i class="fas fa-desktop"></i><span>Мониторы</span></a>
+        <a href="гарнитура.html"><i class="fas fa-headphones"></i><span>Гарнитура</span></a>
+        <a href="контакты.html"><i class="fas fa-envelope"></i><span>Контакты</span></a>
+    </div>
+
+    <!-- Основное содержимое -->
+    <div class="main-content" id="main-content">
+        <h1>Продажа компьютерной техники</h1>
+        <div class="content">
+            <div class="text-container">
+                <p id="section1">Мы предлагаем широкий ассортимент товаров, от ноутбуков до гарнитур, которые отвечают последним тенденциям в технологиях и дизайне. Вы найдете всё необходимое для комфортной работы и развлечений.</p>
+                <p id="section2">Наши ноутбуки обладают мощными характеристиками, что позволяет использовать их как для повседневных задач, так и для сложных проектов. Вы можете выбрать модель, которая идеально подойдет для ваших нужд.</p>
+                <p id="section3">В нашем магазине вы найдете мониторы с высоким разрешением и скоростью отклика, которые идеально подходят как для работы, так и для игр. Широкий ассортимент позволит вам выбрать то, что нужно именно вам.</p>
+                <p id="section4">Наша гарнитура обеспечивает чистый звук, а эргономичный дизайн делает использование комфортным в течение длительного времени. Это отличный выбор для работы, общения и игр.</p>
+                <p id="section5">Свяжитесь с нами для получения профессиональной консультации и заказа товаров. Мы всегда готовы помочь вам выбрать подходящую технику, отвечающую всем вашим требованиям.</p>
+            </div>
+            <div class="image-container">
+                <img src="1.jpg" alt="Пример изображения">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                sidebar.style.width = '260px';
+                mainContent.style.marginLeft = '260px';
+                sidebar.classList.remove('sidebar-collapsed');
+            } else {
+                sidebar.style.width = '60px';
+                mainContent.style.marginLeft = '60px';
+                sidebar.classList.add('sidebar-collapsed');
+            }
+        }
+    </script>
+
+</body>
+</html>
